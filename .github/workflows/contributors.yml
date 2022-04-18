@@ -11,6 +11,6 @@ jobs:
     steps:
       - uses: wow-actions/contributors-list@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           svgPath: CONTRIBUTORS.svg
           round: true
