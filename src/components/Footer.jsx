@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-background-100 py-6 lg:px-12">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-start p-4 md:px-12">
-        <div className="mt-8 flex w-full flex-col lg:flex-row">
+        {/* <div className="mt-8 flex w-full flex-col lg:flex-row">
           <div className="mt-12 grid flex-1 grid-cols-2 gap-8 md:grid-cols-2 lg:mt-0 lg:grid-cols-3">
             <div className="space-y-2">
               <div className="text-sm font-normal text-text-100">Sites</div>
@@ -65,7 +65,7 @@ export default function Footer() {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="bold vercel-callout mt-7 w-full text-center text-sm text-text-100">
           <a
             href="https://vercel.com/?utm_source=digital-support-notes&utm_campaign=oss"
@@ -75,13 +75,9 @@ export default function Footer() {
           </a>
         </div>
         <div className="mt-3 w-full text-center text-sm text-text-100">
-          Copyright © Digital Support Notes 2022. All rights reserved. <br />
-          Coded with ❤️ by <a href="https://nayanpatel.net">
-            Nayan Patel
-          </a> &{' '}
-          <a href="https://github.com/PatelN123/Digital-Support-Notes">
-            the community
-          </a>
+          Copyright © Chocolate & HearLing 2022. All rights reserved. <br />
+          Coded with ❤️ by <a href="https://yangchaoyi.vip">小狮子</a> &{' '}
+          <a href="https://github.com/LionCubFrontEnd/docs">the community</a>
         </div>
       </div>
     </footer>
