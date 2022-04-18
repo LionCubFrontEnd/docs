@@ -1,14 +1,14 @@
 {
   "env": {
-    "browser": true,
-    "es2021": true
+    "node": true,
+    "browser": true
   },
   "settings": {
     "react": {
       "version": "detect"
     }
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  "extends": ["eslint:recommended", "prettier", "plugin:react/recommended"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -16,8 +16,17 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "parser": "@babel/eslint-parser",
   "plugins": ["react", "prettier"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "no-unused-vars": [
+      "warn",
+      {
+          "varsIgnorePattern": "^[A-Z]"
+      }
+  ]
   }
 }
