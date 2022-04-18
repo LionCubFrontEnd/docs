@@ -76,12 +76,8 @@ export default function Footer() {
         </div>
         <div className="mt-3 w-full text-center text-sm text-text-100">
           Copyright © Chocolate & HearLing 2022. All rights reserved. <br />
-          Coded with ❤️ by <a href="https://yangchaoyi.vip">
-            小狮子
-          </a> &{' '}
-          <a href="https://github.com/LionCubFrontEnd/docs">
-            the community
-          </a>
+          Coded with ❤️ by <a href="https://yangchaoyi.vip">小狮子</a> &{' '}
+          <a href="https://github.com/LionCubFrontEnd/docs">the community</a>
         </div>
       </div>
     </footer>
