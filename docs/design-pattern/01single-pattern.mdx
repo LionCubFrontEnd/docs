@@ -1,0 +1,380 @@
+---
+id: single-pattern
+title: 单例模式
+---
+
+## 理解
+
+保证一个类仅有一个实例，并提供一个访问它的全局访问点。也可以理解成在我们的应用程序中共享一个全局实例。
+
+### 场景
+
+单击按钮的时候，页面中会出现一个浮窗，而这个浮窗是唯一的，无论单击多少次按钮，这个浮窗都只会被创建一次，那么这个浮窗就适合用单例模式来创建。
+
+### 实现
+
+用一个变量来标志当前是否已经为某个类创建过对象，如果是，则在下一次获取该类的实例时，直接返回之前创建的对象。
+
+## 传统面向对象语言实现
+传统的面向对象语言，单例对象是从“**类**”中创建而来。（现在可以告知的是，在`JavaScript` 中这种并不完全适用，但还是需要了解）
+
+``` js
+const Singleton = function(name){
+  this.name = name;
+  this.instance = null;// 变量标记
+}
+
+Singleton.prototype.getName = function(){
+  alert(this.name);
+}
+
+Singleton.getInstance = function(name){
+  if(!this.instance){
+  	this.instance = new Singleton(name);
+  }
+  return this.instance// 返回之前创建的对象
+}
+
+const a = Singleton.getInstance('hearling1');
+const b = Singleton.getInstance('hearling2');
+
+alert(a === b);// true
+```
+
+### 透明单例模式
+
+用户从这个类中创建对象的时候，可以像使用其他任何普通类一样。
+
+``` jsx
+var CreateDiv = (function () {
+  var instance;
+  var CreateDiv = function (html) {
+    // Singleton函数
+    if (instance) {
+      return instance;
+    }
+    this.html = html; // 1、创建对象
+    this.init(); //2、执行初始化init方法
+    return (instance = this); // 保证只有一个对象
+  };
+  CreateDiv.prototype.init = function () {
+    var div = document.createElement("div");
+    div.innerHTML = this.html;
+    document.body.appendChild(div);
+  };
+  return CreateDiv;
+})();
+
+var a = new CreateDiv("Healing1");
+var b = new CreateDiv("Healing2");
+
+alert(a === b); // ture
+```
+
+为了把`instance` 封装起来，我们使用了自执行的匿名函数和闭包，并且让这个匿名函数返回真正的`Singleton` 构造方法，这增加了一些程序的复杂度，阅读起来也不是很舒服。
+
+稍微了解规范的话，会知道违反了“**单一职责原则**”，这是一种不好的做法，需要改进。
+
+### 代理实现单例模式
+将上述的代码进行指责拆分，可以使用代理实现：
+
+``` jsx
+var CreateDiv = function (html) {
+  this.html = html;
+  this.init();
+};
+
+CreateDiv.prototype.init = function () {
+  var div = document.createElement("div");
+  div.innerHTML = this.html;
+  document.body.appendChild(div);
+};
+
+// 引入代理类proxySingletonCreateDiv
+var ProxySingletonCreateDiv = (function () {
+  var instance;
+  return function (html) {
+    if (!instance) {
+      instance = new CreateDiv(html);
+    }
+    return instance;
+  };
+})();
+
+var a = new ProxySingletonCreateDiv("Healing1");
+var b = new ProxySingletonCreateDiv("Healing2");
+
+alert(a === b); // ture
+```
+
+通过引入代理类的方式，我们同样完成了一个单例模式的编写，跟之前不同的是，现在我们把负责管理单例的逻辑移到了代理类`proxySingletonCreateDiv`中。这样一来，`CreateDiv`就变成了一个普通的类，它跟`proxySingletonCreateDiv`组合起来可以达到单例模式的效果。
+
+## JavaScript中的单例模式
+
+前面提到的**传统面向对象**语言中的实现，单例对象从“**类**”中创建而来。但`JavaScript`其实是一门无类（**class-free**）语言，也正因为如此，生搬单例模式的概念并无意义。在`JavaScript`中创建对象的方法非常简单，既然我们只需要一个**唯一的对象**，为什么要为它先创建一个“类”呢?
+
+### 惰性单例
+在JavaScript中，我们可以这样实现单例模式，而不需要为它创建一个类：
+
+``` jsx
+var createLoginLayer = (function () {
+  var div;
+  return function () {
+    if (!div) {
+      div = document.createElement("div");
+      div.innerHTML = "这是一个窗口";
+      div.style.display = "none";
+      document.body.appendChild(div);
+    }
+    return div;
+  };
+})();
+document.getElementById("loginBtn").onclick = function () {
+  var loginLayer = createLoginLayer();
+  loginLayer.style.display = "block";
+};
+```
+
+### 通用的惰性单例
+
+上一段代码存在的问题：
+
+-   这段代码仍然是违反单一职责原则的，创建对象和管理单例的逻辑都放在`createLoginLayer`对象内部
+-   如果我们下次需要创建页面中唯一的`iframe`，或者`script`标签，用来跨域请求数据，就必须得如法炮制，把`createLoginLayer`函数几乎照抄一遍，类似这样：
+
+``` jsx
+var createIframe = (function () {
+  var iframe;// 照抄上代码，改div为iframe
+  return function () {
+    if (!iframe) {
+      div = document.createElement("div");
+      div.innerHTML = "这是一个窗口";
+      div.style.display = "none";
+      document.body.appendChild(div);
+    }
+    return iframe;
+  };
+})();
+```
+
+将不变的部分隔离出来，用一个变量标志是否创建过对象：
+
+``` jsx
+var obj;
+if(!obj){
+  obj = xxx;//如果是则下次之间返回已经创建好的对象
+}
+```
+
+封装，将逻辑封装到`getSingle`函数内部，创建对象的方法，当作`props`：
+
+``` jsx
+var getSingle = function(fn){
+  var result;
+  return function(){
+  	return result || (result = fn.apply(this,arguments))
+  }
+}
+```
+
+这样写的好处，及代码：
+
+-   可以传各样的创建对象函数
+-   `getSingle`返回新函数，并用`result`来保存fn的计算结果，且不会被销毁（闭包）
+-   在将来的请求中，如果`result`已经被赋值，那么它将返回这个值
+
+``` jsx
+var createLoginLayer = function(){
+  var div = document.createElement('div');
+  div.innerHTML = '这是一个窗口';
+  div.style.display = 'none';
+  document.body.appendChild(div);
+  return div;
+};
+
+var createSingelLoginLayer = getSingle(createLoginLayer);
+
+document.getElementById('loginBtn').onclick = function(){
+	var loginLayer = createSingelLoginLayer();
+  loginLayer.style.display = 'block';
+}
+```
+
+这种单例模式的用途远不止创建对象，比如我们通常渲染完页面中的一个列表之后，接下来要给这个列表绑定`click`事件，如果是通过`ajax`动态往列表里追加数据，在使用事件代理的前提下，`click`事件实际上只需要在第一次渲染列表的时候被绑定一次，但是我们不想去判断当前是否是第一次渲染列表，可以利用`getSingle`函数，也能达到效果：
+
+``` jsx
+var bindEvent = getSingle(function () {
+  document.getElementById("div1").onclick = function () {
+    alert("click");
+  };
+  return true;
+});
+```
+
+### 小结
+
+单例模式是一种简单但非常实用的模式，特别是惰性单例技术，在合适的时候才创建且只创建唯一对象。更奇妙的是，创建对象和管理单例的职责被分布在两个不同的方法中，这两个方法组合起来才具有单例模式的威力。
+
+## 实际运用
+
+单例模式通常被用于在我们的应用程序中共享一个全局实例。
+
+单例是可以实例化一次的类，并且可以全局访问。这个单一实例可以在我们的应用程序中共享，这使得单例非常适合管理应用程序中的全局状态。
+
+### 类实现
+
+首先，让我们看看使用 `ES5` 类的单例会是什么样子。对于这个例子，我们将构建一个 `Counter` 类：
+
+-   创建一个名为 `instance` 的变量。
+-   在 `Counter` 的构造函数中，我们可以在创建新实例时将`instance`设置为对实例的引用。
+-   我们可以通过检查实例变量是否已经有值来防止新的实例化。
+-   如果是这种情况，则实例已经存在。这不应该发生：这里抛出一个错误让用户知道
+
+``` jsx
+let instance;
+let counter = 0;
+
+class Counter{
+  constructor(){
+  	if(instance){
+    	throw new Error('You can only create one instance')
+    }
+    instance = this;
+  }
+  
+  getInstance(){
+  	return this;
+  }
+  
+  getCount(){
+  	return counter;
+  }
+  
+  increment(){
+  	return ++counter;
+  }
+  
+  decrement(){
+  	return --counter;
+  }
+}
+```
+
+验证一下：
+
+``` jsx
+const counter1 = new Counter();
+const counter2 = new Counter();
+console.log(counter1.getInstance() === counter2.getInstance());
+//Error: You can only create one instance
+```
+
+很好，我们不能创建多个实例了。
+
+需要注意的是，当我们要导出这个`Counter`实例时，我们应该`freeze`。 `Object.freeze` 方法确保消费代码不能修改 `Singleton`。无法添加或修改冻结实例上的属性，这降低了意外覆盖 `Singleton` 上的值的风险。
+
+``` jsx
+const singletonCounter = Object.freeze(new Counter());
+export default singletonCounter;
+```
+
+### 常规对象实现
+
+将上述的类实现改为使用常规对象，让我们使用与之前看到的相同的示例。然而这一次，计数器只是一个包含以下内容的对象：
+
+``` jsx
+let count = 0;
+
+const counter{
+  increment(){
+  	return ++counter;
+  },
+  decrement(){
+  	return --counter;
+  }
+};
+
+Object.freeze(counter);
+export {counter};
+```
+
+计数器详细代码：<https://codesandbox.io/embed/competent-moon-rvzrr>
+
+由于对象是通过引用传递的，`redButton.js` 和 `blueButton.js` 都在导入对同一个 `singletonCounter` 对象的引用。在这两个文件中修改 `count` 的值将修改 `singletonCounter` 上的值，这在两个文件中都是可见的。
+
+OK 上述为一个简单的理解的例子，在实际运用中 `Counter` 示例的应用程序类似于这样：
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/aef6116bb43b4825870809fb98c34bc0~tplv-k3u1fbpfcp-zoom-1.image)
+
+会发现，当我们在 `redButton.js` 或 `blueButton.js` 中调用 `increment` 方法时，`Counter` 实例上的 `counter` 属性值会在两个文件中更新。我们点击红色或蓝色按钮都没有关系：**所有实例共享相同的值**。这就是为什么计数器一直递增一的原因，即使我们在不同的文件中调用该方法。
+
+### 优缺点
+
+-   将实例化限制为仅一个实例可能会节省大量内存空间。我们不必每次都为新实例设置内存，而只需为该实例设置内存，该实例在整个应用程序中都会被引用。但是，Singleton（单例模式） 实际上被认为是一种反模式（anti-pattern），并且可以（或..应该）在 JavaScript 中避免使用。
+-   在许多编程语言中，例如 Java 或 C++，不可能像在 JavaScript 中那样直接创建对象。在那些面向对象的编程语言中，我们需要创建一个类，它会创建一个对象。该创建的对象具有类实例的值，就像 JavaScript 示例中的实例值一样。
+-   但是，上面示例中显示的类实现实际上是矫枉过正。由于我们可以直接在 JavaScript 中创建对象，因此我们可以简单地使用常规对象来实现完全相同的结果。让我们来介绍一下使用单例的一些缺点！
+
+## 问题
+错误的使用单例模式，很可能带来一些问题，就比如我写的这个例子，其实存在一下问题：
+### 测试
+
+测试依赖于 `Singleton` 的代码可能会变得很棘手。由于我们不能每次都创建新实例，因此所有测试都依赖于对上一次测试的**全局实例**的修改。在这种情况下，测试的**顺序**很重要，一个小的修改可能会导致整个测试套件失败。测试后，我们需要重置整个实例以重置测试所做的修改。
+
+### 依赖隐藏
+
+当导入另一个模块时，在这种情况下为 `superCounter.js`，该模块导入 `Singleton` 可能并不明显。在其他文件中，例如本例中的 `index.js`，我们可能正在导入该模块并调用其方法。这样，我们不小心修改了 `Singleton` 中的值。这可能会导致意外行为，因为可以在整个应用程序中共享 `Singleton` 的多个实例，这些实例也会被修改。
+
+``` jsx
+import Counter from "./counter";
+
+export default class SuperCounter {
+  constructor() {
+    this.count = 0;
+  }
+
+  increment() {
+    Counter.increment();
+    return (this.count += 100);
+  }
+
+  decrement() {
+    Counter.decrement();
+    return (this.count -= 100);
+  }
+}
+
+//index.js
+const counter = new SuperCounter();
+counter.increment();
+console.log("Counter in counter.js: ", Counter.getCount());//Counter in counter.js:  1
+```
+
+### 全局行为
+
+一个单例实例应该能够在整个应用程序中被引用。全局变量本质上表现出相同的行为：由于全局变量在全局范围内可用，我们可以在整个应用程序中访问这些变量。
+
+**拥有全局变量通常被认为是一个糟糕的设计决策**。全局范围污染最终可能导致意外覆盖全局变量的值，从而导致许多意外行为。
+
+在 `ES2015` 中，创建全局变量相当少见。新的 `let` 和 `const` 关键字通过将使用这两个关键字声明的变量保持在块范围内来防止开发人员意外污染全局范围。 `JavaScript` 中的新模块系统通过能够从模块中导出值并将这些值导入其他文件中，使得创建全局可访问的值更容易而不会污染全局范围。
+
+但是，单例的常见用例是在整个应用程序中拥有某种全局状态。让你的代码库的多个部分依赖于同一个可变对象（**mutable object**）可能导致意外行为。
+
+通常，代码库的某些部分会修改全局状态中的值，而其他部分会使用该数据。这里的执行顺序很重要： 我们不想在没有数据要消费的时候（还）不小心先消费数据。 随着应用程序的增长以及数十个组件相互依赖，使用全局状态时理解数据流可能会变得非常棘手。
+
+在 `React` 中，我们经常通过 `Redux` 或 `React Context` 等状态管理工具来依赖全局状态，而不是使用 `Singletons`。尽管它们的全局状态行为可能看起来类似于单例，但这些工具提供了只读状态而不是单例的可变状态。使用 `Redux` 时，只有纯函数 `reducer` 可以在组件通过调度程序发送操作后更新状态。
+
+尽管使用这些工具不会神奇地消除全局状态的缺点，但我们至少可以确保全局状态按照我们想要的方式发生变化，因为组件不能直接更新状态。
+
+## 总结
+单例模式（Singleton Pattern）是属于创建型模式，它提供了一种创建对象的最佳方式。保证仅有一个实例，并提供一个访问它的全局访问点。当您想控制实例数目，节省内存的时候使用。
+
+**优点** ： 内存里只有一个实例，减少频繁的创建和销毁实例提高性能。
+
+**缺点**： 不适用于变化频繁的对象（如上述的count），可能存在测试问题和数据流等问题（上节所述缺点）。创建之后长时间不被利用会被垃圾回收。
+
+🌸
+非常感谢你看到这，如果觉得不错的话点个赞 ⭐ 吧~~
+今天也是在努力变强不变秃的 HearLing 呀 💪
+🌸
+
+

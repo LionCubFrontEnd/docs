@@ -6,12 +6,10 @@ const pageRef = require('./src/plugins/pageRef');
 
 const pageOptions = {
   sidebarCollapsible: false,
-  editUrl: 'https://github.com/pateln123/digital-support-notes/tree/main',
-  showLastUpdateAuthor: true,
-  showLastUpdateTime: true,
-  beforeDefaultRemarkPlugins: [
-    pageRef,
-  ],
+  // editUrl: 'https://github.com/pateln123/digital-support-notes/tree/main',
+  // showLastUpdateAuthor: true,
+  // showLastUpdateTime: true,
+  beforeDefaultRemarkPlugins: [pageRef],
 };
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
@@ -29,7 +27,7 @@ module.exports = {
   themeConfig: {
     announcementBar: {
       id: 'beta', // Any value that will identify this message.
-      content: "❤欢迎来到小狮子前端编程成长圈，学如逆水行舟，不进则退~",
+      content: '❤欢迎来到小狮子前端编程成长圈，学如逆水行舟，不进则退~',
       backgroundColor: '#fafbfc', // Defaults to `#fff`.
       textColor: '#091E42', // Defaults to `#000`.
       isCloseable: true, // Defaults to `true`.
@@ -45,7 +43,7 @@ module.exports = {
         alt: '小狮子前端',
         src: '/img/lion-logo.png',
       },
-      items: navbarItem
+      items: navbarItem,
     },
     hideableSidebar: true,
     prism: {
