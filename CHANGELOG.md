@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/LionCubFrontEnd/docs/compare/v1.0.0...v1.1.0) (2022-04-20)
+
+
+### Bug Fixes
+
+* fix release build error ([#4](https://github.com/LionCubFrontEnd/docs/issues/4)) ([355e99d](https://github.com/LionCubFrontEnd/docs/commit/355e99dc3e3dbcef7af21e680492c5d0f8c37b02))
+* fix release public ([#3](https://github.com/LionCubFrontEnd/docs/issues/3)) ([e51620e](https://github.com/LionCubFrontEnd/docs/commit/e51620ef0d8d06d1a987cc89ccc90fb1c83bf090))
+
+
+### Features
+
+* update footer info and update pull_request_template ([#1](https://github.com/LionCubFrontEnd/docs/issues/1)) ([47dfaad](https://github.com/LionCubFrontEnd/docs/commit/47dfaad6257d5eaa657ce0175e089fe97efec8ed))
+* 接入 antd & 新增文章 & 刷题表格 ([#2](https://github.com/LionCubFrontEnd/docs/issues/2)) ([a78a4a5](https://github.com/LionCubFrontEnd/docs/commit/a78a4a5e1d2019ddf1c6b84f88968de6d7637ea0))
+
 # 1.0.0 (2022-04-18)
 
 
