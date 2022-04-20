@@ -1,0 +1,499 @@
+---
+id: observer-pattern
+title: 发布订阅/观察者模式
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 发布订阅/观察者模式
+发布—订阅模式又叫观察者模式，它定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都将得到通知。
+
+### 通俗的例子
+
+小玲最近迷上了看连载书，每天都在等更新，，，什么时候有书除了书店没有人能够知道。于是小玲隔三差五都会来书店看看出没出新版。除了小玲，还有张三、李四、王五也会来看更新了没。小玲不高兴，每天要跑来看有没有更新。书店不高兴，每天都有人问一样的问题。
+
+当然现实中不会这么笨的处理：小玲离开之前，把电话号码留在了书店。书店答应他，新书一出就马上发信息通知，他们的电话号码都被记在花名册上，新书出的时候，书店会翻开花名册，依次发送一条短信来通知他们。
+
+**优点：**
+
+在这个例子中使用发布—订阅模式有着显而易见的优点：
+
+-   读者不用再天天向书店咨询，在合适的时间点，书店作为发布者会通知这些消息订阅者。
+-   读者和书店之间不再强耦合在一起，当有新的读者出现时，他只需把手机号码留在书店，书店不关心读者的任何情况，不管读者是男是女。而书店的任何变动也不会影响读者，只要书店记得发布新书了给他们发短信这件事情。
+
+由优点可以见得：
+<Tabs>
+  <TabItem value="first" label="优点1" default>
+  1. 发布—订阅模式可以广泛应用于异步编程中，这是一种替代传递回调函数的方案。
+  <br/>
+  2. 在异步编程中使用发布—订阅模式，我们就无需过多关注对象在异步运行期间的内部状态，而只需要订阅感兴趣的事件发生点。
+  </TabItem>
+  <TabItem value="second" label="优点2">
+  1. 发布—订阅模式可以取代对象之间硬编码的通知机制，一个对象不用再显式地调用另外一个对象的某个接口。
+  <br/>
+  2. 发布—订阅模式让两个对象松耦合地联系在一起，虽然不太清楚彼此的细节，但这不影响它们之间相互通信。
+  <br/>
+  3. 当有新的订阅者出现时，发布者的代码不需要任何修改；同样发布者需要改变时，也不会影响到之前的订阅者。只要之前约定的事件名没有变化，就可以自由地改变它们。
+  </TabItem>
+</Tabs>
+    
+
+### DOM 事件
+
+实际上，只要我们曾经在 `DOM` 节点上面绑定过事件函数，那我们就曾经使用过发布—订阅模式：
+
+``` js
+document.body.addEventListener('click',function(){
+	alert(2);
+},false);
+
+document.body.click();//模拟用户点击
+```
+
+在这里需要监控用户点击 `document.body` 的动作，但是我们没办法预知用户将在什么时候点击。所以我们订阅 `document.body` 上的 `click` 事件，当 `body` 节点被点击时， `body` 节点便会向订阅者发布这个消息。
+
+当然我们还可以随意增加或者删除订阅者，增加任何订阅者都不会影响发布者代码的编写：
+``` js
+document.body.addEventListener('click',function(){
+    alert(2);
+},false);
+
+document.body.addEventListener('click',function(){
+    alert(3);
+},false);
+
+document.body.addEventListener('click',function(){
+    alert(4);
+},false);
+
+document.body.click();//模拟用户点击
+```
+
+### 自定义事件
+
+如何实现：
+-   首先要指定好谁充当发布者（比如书店）；
+-   然后给发布者添加一个缓存列表，用于存放回调函数以便通知订阅者（书店的花名册）；
+-   最后发布消息的时候，发布者会遍历这个缓存列表，依次触发里面存放的订阅者回调函数（遍历花名册，挨个发短信）。
+
+另外，我们还可以往回调函数里填入一些参数，订阅者可以接收这些参数。这是很有必要的，比如书店可以在发给订阅者的短信里加上书的单价、页数、章节等信息，订阅者接收到这些信息之后可以进行各自的处理：
+
+<Tabs>
+  <TabItem value="1" label="简单实现" default>
+
+```js
+var salesOffice = {}; //书店
+salesOffice.clientList = []; //缓存列表，存放订阅者的调用函数
+
+salesOffice.listen = function (fn) {
+  //增加订阅者
+  this.clientList.push(fn); //添加进缓存列表
+};
+
+salesOffice.trigger = function () {
+  //发布消息
+  for (let i = 0, fn; (fn = this.clientList[i++]); ) {
+    fn.apply(this, arguments); //arguments 是发布消息时带上的参数
+  }
+};
+```
+
+  </TabItem>
+  <TabItem value="2" label="测试">
+
+```js
+// HearLing订阅消息
+salesOffice.listen(function (book,price) {
+  console.log("HearLing", book,price);
+});
+// 小玲订阅消息
+salesOffice.listen(function  (book,price) {
+  console.log("小玲", book, price);
+});
+salesOffice.trigger('深入浅出设计模式', 88); // 输出：HearLing 深入浅出设计模式 88  小玲 深入浅出设计模式 88 
+salesOffice.trigger('你不知道JavaScript', 98); // 输出：HearLing 你不知道JavaScript 98  小玲 你不知道JavaScript 99 
+```
+
+  </TabItem>
+</Tabs>
+
+
+实现了一个简单的发布—订阅模式。
+
+
+但还存在一些问题。我们看到测试中的订阅者接收到了发布者发布的每个消息， `HearLing` 只想买 “深入浅出设计模式” ，但是推给他不关心的 “你不知道JavaScript” ，这对 `HearLing` 来说是不必要的困扰。
+
+所以我们有必要增加一个标示 `key` ，让订阅者只订阅自己感兴趣的消息。
+
+``` js
+var salesOffice = {}; //书店
+salesOffice.clientList = {}; //缓存列表，存放订阅者的调用函数
+
+salesOffice.listen = function (key, fn) {
+  //增加订阅者
+  if (!this.clientList[key]) {
+    // 如果还没有订阅过此类消息，给改类消息创建一个缓存列表
+    this.clientList[key] = [];
+  }
+  this.clientList[key].push(fn); //订阅的消息添加进缓存列表
+};
+
+salesOffice.trigger = function () {
+  //发布消息
+  var key = Array.prototype.shift.call(arguments), // 取出消息类型
+  fns = this.clientList[key]; // 取出该消息对应的回调函数集合
+
+  if (!fns || fns.length === 0) {
+    // 如果没有订阅该消息，则返回
+    return false;
+  }
+
+  for (let i = 0, fn; (fn = fns[i++]); ) {
+    fn.apply(this, arguments); //arguments 是发布消息时带上的参数
+  }
+};
+
+// HearLing订阅消息
+salesOffice.listen("深入浅出设计模式", function (price) {
+  console.log("HearLing", price);
+});
+// 小玲订阅消息
+salesOffice.listen("你不知道JavaScript", function (price) {
+  console.log("小玲", price);
+});
+salesOffice.trigger("深入浅出设计模式", 88); // 输出：HearLing 88
+salesOffice.trigger("你不知道JavaScript", 98); // 输出：小玲 98
+```
+
+很明显，现在订阅者可以只订阅自己感兴趣的事件了。
+
+### 通用实现
+
+假设现在 `HearLing` 又去另一个书店买书，那么这段代码是否必须在另一个书店重写一次呢，有没有办法可以让所有书店都拥有一套发布—订阅功能呢？
+
+答案显然是有的，`JavaScript` 作为一门解释执行的语言，给对象动态添加职责是理所当然的事情。
+
+把发布—订阅的功能提取出来，放在一个单独的对象内：
+
+``` js
+var event = {
+  clientList: [],
+  listen: function (key, fn) {
+    if (!this.clientList[key]) {
+      this.clientList[key] = [];
+    }
+    this.clientList[key].push(fn); // 订阅的消息添加缓存列表
+  },
+  trigger: function () {
+    var key = Array.prototype.shift.call(arguments),
+      fns = this.clientList[key]; // 取出该消息对应的回调函数集合
+
+    if (!fns || fns.length === 0) {
+      // 如果没有订阅该消息，则返回
+      return false;
+    }
+
+    for (let i = 0, fn; (fn = fns[i++]); ) {
+      fn.apply(this, arguments); //arguments 是发布消息时带上的参数
+    }
+  },
+};
+```
+
+再定义一个 `installEvent` 函数，这个函数可以给所有对象都动态安装发布-订阅功能：
+
+``` js
+var installEvent = function (obj) {
+  for (var i in event) {
+    obj[i] = event[i];
+  }
+};
+```
+
+书店对象 `salesOffices` 动态增加发布—订阅功能：
+
+``` js
+var salesOffice = {}; //书店
+installEvent(salesOffice);
+
+salesOffice.listen("深入浅出设计模式", function (price) {
+  console.log("HearLing订阅深入浅出设计模式价格:", price);
+});
+
+salesOffice.listen("你不知道JavaScript", function (price) {
+  console.log("小玲订阅你不知道JavaScript价格:", price);
+});
+salesOffice.trigger("深入浅出设计模式", 88); // HearLing订阅深入浅出设计模式价格: 88
+salesOffice.trigger("你不知道JavaScript", 98); // 小玲订阅你不知道JavaScript价格: 98
+```
+
+### 取消订阅事件
+
+有时候，我们也许需要取消订阅事件的功能。比如 `HearLing` 不想买书了，为了避免继续接收到书店推送过来的短信， `HearLing` 需要取消之前订阅的事件。现在我们给 `event` 对象增加 `remove` 方法：
+ 
+``` js
+event.remove = function (key, fn) {
+  var fns = this.clientList[key];
+  if (!fns) {
+    // 如果key 对应的消息没有被人订阅，则直接返回
+    return false;
+  }
+  if (!fn) {
+    // 如果没有传入具体的回调函数，表示需要取消可以对应消息的所有订阅
+    fns && (fns.length = 0);
+  } else {
+    for (i = fns.length - 1; i >= 0; i--) {
+      var _fn = fns[i];
+      if (_fn === fn) {
+        fns.splice(i, 1); // 删除订阅者的回调函数
+      }
+    }
+  }
+};
+```
+并在订阅之后取消订阅：
+
+```js
+salesOffice.listen("深入浅出设计模式", fn1 = function (price) {
+  console.log("HearLing订阅深入浅出设计模式价格:", price);
+});
+
+salesOffice.listen("你不知道JavaScript", function (price) {
+  console.log("小玲订阅你不知道JavaScript价格:", price);
+});
+salesOffice.remove("深入浅出设计模式", fn1);
+salesOffice.trigger("深入浅出设计模式", 88); // 
+salesOffice.trigger("你不知道JavaScript", 98); // 小玲订阅你不知道JavaScript价格: 98
+
+```
+
+### 实现EventEmitter
+面试是具有更官方的写法的，相信你看了以上的内容已经可以将它写成一个类实现了。在这个类里我们要明确，需要具备的变量和函数：
+1. 需要一个维护事件和监听者的对象
+2. 使用 `on` 函数注册事件监听者
+3. 使用 `emit` 函数发布事件
+4. 使用 `off` 函数移除某个事件的一个监听者
+```js
+class EventEmitter {
+  constructor() {
+    // 维护事件及监听者
+    this.listeners = {};
+  }
+  /**
+   * 注册事件监听者
+   * @param {String} type 事件类型
+   * @param {Function} cb 回调函数
+   */
+  on(type, cb) {
+    if (!this.listeners[type]) {
+      this.listeners[type] = [];
+    }
+    this.listeners[type].push(cb);
+  }
+  /**
+   * 发布事件
+   * @param {String} type 事件类型
+   * @param  {...any} args 参数列表，把emit传递的参数赋给回调函数
+   */
+  emit(type, ...args) {
+    if (this.listeners[type]) {
+      this.listeners[type].forEach((cb) => {
+        cb(...args);
+      });
+    }
+  }
+  /**
+   * 移除某个事件的一个监听者
+   * @param {String} type 事件类型
+   * @param {Function} cb 回调函数
+   */
+  off(type, cb) {
+    if (this.listeners[type]) {
+      const targetIndex = this.listeners[type].findIndex((item) => item === cb);
+      if (targetIndex !== -1) {
+        this.listeners[type].splice(targetIndex, 1);
+      }
+      if (this.listeners[type].length === 0) {
+        delete this.listeners[type];
+      }
+    }
+  }
+}
+// 创建事件管理器实例
+const ee = new EventEmitter();
+// 注册事件监听者
+ee.on("设计模式",fn1 = function (price) {
+    console.log(`HearLing订阅设计模式这本书的价格是:${price}`);
+  }
+);
+ee.on("你不知道JavaScript", function (price) {
+  console.log(`HearLing订阅你不知道JavaScript这本书的价格是:${price}`);
+});
+ee.emit("设计模式", 100); // 输出HearLing订阅设计模式这本书的价格是:100
+
+ee.off("设计模式", fn1);
+ee.emit("设计模式"); // 此时事件监听已经被移除，没有console.log
+```
+#### 增强版
+另增加函数，完善功能：
+1. 使用 `once` 函数只执行一次
+2. 使用 `offAll` 函数移除某个事件的所有监听者
+
+```js
+// 在上节代码新增
+/**
+ * 某个事件只监听一次
+ * @param {String} type 事件类型
+ * @param {Function} cb 回调函数
+ */
+once(type, cb) {
+   const execFn = () => {
+     cb.apply(this);
+     this.off(type, execFn);
+   };
+   this.on(type, execFn);
+}
+
+/**
+ * 移除某个事件的所有监听者
+ * @param {String} type 事件类型
+ */
+offAll(type) {
+    if (this.listeners[type]) {
+        delete this.listeners[type]
+    }
+}
+```
+
+## 观察者模式
+
+网上很多都喜欢将发布订阅模式、观察者模式还有 `EventMitter` 进行区分，我个人觉得没有什么必要，内核都是一样的，更多只是命名上的不同。
+
+### 基本构成
+
+使用观察者模式，我们可以将某些对象（观察者）订阅到另一个对象，称为 `observable`。每当一个事件发生时， `observable` 就会通知它的所有观察者。
+
+一个可观察对象通常包含 3 个重要部分：
+
+-   `observers` 观察者：当特定事件发生时将收到通知的观察者数组
+-   `subscribe()` : 一种将观察者添加到观察者列表的方法
+-   `unsubscribe()` ：从观察者列表中删除观察者的方法
+-   `notify()` ：当特定事件发生时通知所有观察者的方法
+
+### 简易版实现
+
+让我们创建一个最简易的 `observable`。
+我们需要实现最核心的部分：
+-   1、使用 `subscribe` 方法将观察者添加到观察者列表中
+-   2、使用 `unsubscribe` 方法删除观察者
+-   3、使用 `notify` 方法通知所有订阅者。
+
+```js
+class Observable {
+  constructor() {
+    this.observers = [];
+  }
+
+  subscribe(func) {
+    this.observers.push(func);
+  }
+
+  unsubscribe(func) {
+    this.observers = this.observers.filter((observer) => observer !== func);
+  }
+
+  notify(data) {
+    this.observers.forEach((observer) => observer(data));
+  }
+}
+```
+
+明显的是上述只能完成，一有书到就发布消息，而没有分类型，而导致订阅者收到不是需要的消息，所以我们需要增加 `key` 来区分，思想可见自定义模式的增强版。
+
+这样一个观察者模式其实就能解决很多问题了，比如我们希望观测到事件触发就通知所有的订阅者，而不关心细节。当然我们也可以去增加 `key` ，来实现不同的通知，但是一般情况我们把这种写法看成观察者模式。
+
+<Tabs>
+<TabItem value="js" label="优点" default>
+
+1. 分离关注点
+2. 单一责任原则
+观察者对象与可观察对象没有紧密耦合，并且可以随时（解）耦合。可观察对象负责监控事件，而观察者只是处理接收到的数据。
+
+</TabItem>
+<TabItem value="py" label="缺点">
+
+如果观察者变得过于复杂，则在通知所有订阅者时可能会导致性能问题。
+
+</TabItem>
+</Tabs>
+
+
+#### 增强版
+那如果我们实现，在这个电话簿上记下订阅的类型再分发消息，那么其实就是实现了我们在发布订阅模式的类实现版。
+
+为了实现增强，需做以下改造：
+1. 需要增加 `key` 做区分，所以将 `observers` 改为对象
+2. `subscribe` 函数不再是简单地 `push`，需要不同 `type` 数组放入回调
+3. `unsubscribe` 和 `notify` 则都需要增加一层 `type` 判断
+
+```js
+class Observable {
+  constructor() {
+    this.observers = {};
+  }
+
+  subscribe(type, func) {
+    //增加type和判断
+    if (!this.observers[type]) {
+      this.observers[type] = [];
+    }
+    this.observers[type].push(func);
+  }
+
+  unsubscribe(type, func) {
+    //不是直接filter函数，而是根据类型删
+    if (this.observers[type]) {
+      this.observers[type] = this.observers[type].filter(
+        (observer) => observer !== func
+      );
+    }
+  }
+
+  notify(type, data) {
+    //增加type判断
+    if (this.observers[type]) {
+      this.observers[type].forEach((fn) => fn(data));
+    }
+  }
+}
+// 和用发布订阅写的是一样的结果
+const observer = new Observable();
+
+observer.subscribe("设计模式",fn1 = function (price) {
+  console.log(`HearLing订阅设计模式这本书的价格是:${price}`);
+});
+observer.subscribe("你不知道JavaScript", function (price) {
+  console.log(`HearLing订阅你不知道JavaScript这本书的价格是:${price}`);
+});
+
+observer.notify("设计模式", 100); // 输出HearLing订阅设计模式这本书的价格是:100
+
+observer.unsubscribe("设计模式", fn1);
+observer.notify("设计模式"); // 此时事件监听已经被移除，没有console.log
+```
+### 总结
+一句话总结发布订阅/观察者模式：当事件发生时，使用该模式通知订阅者。
+
+发布订阅模式和观察者模式其实没有区别，只是我们大多情况理解的观察者模式是一个数组而不是对象，也不区分类别，所以导致产生发布订阅模式和观察者模式不一样的想法。
+
+
+那我们可以简单地区分，一种是有类型判断而一种是没有类型判断的：
+- 有类型判断
+    - 优点：根据类型不同通知不同的订阅者，更加灵活准确
+    - 缺点：当事件类型越来越多，会难以维护，需要考虑事件命名的规范，也要防范数据流混乱。
+- 无类型判断
+    - 优点：适用于不做细分类型的场景，观测的事件触发就通知所有观察者，实现简单。
+    - 缺点：无法做到精细化通知，不易拓展。
+    
+
+参考文章 -  `《JavaScript设计模式与开发实践》` 
