@@ -10,7 +10,7 @@ const pageOptions = {
   beforeDefaultRemarkPlugins: [pageRef],
 };
 
-const sidebarConfig = sidebarConfigArr.map(item=>{
+const sidebarConfig = sidebarConfigArr.map((item) => {
   return [
     '@docusaurus/plugin-content-docs',
     {
@@ -20,13 +20,13 @@ const sidebarConfig = sidebarConfigArr.map(item=>{
       sidebarPath: require.resolve('./sidebarAutoGen.js'),
       ...pageOptions,
     },
-  ]
-})
+  ];
+});
 
 const plugins = [
   tailwindPlugin,
   webpackPlugin,
   ['docusaurus-plugin-sass', {}],
-  ...sidebarConfig
+  ...sidebarConfig,
 ];
 module.exports = plugins;

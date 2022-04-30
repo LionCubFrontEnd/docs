@@ -4,30 +4,34 @@
  * 添加目录 icon 地址：https://react-icons.github.io/react-icons/icons?name=fc
  */
 
-const  {
-    FcIdea,
-    FcCalendar,
-    FcInspection,
-    FcBarChart
+const {
+  FcIdea,
+  FcCalendar,
+  FcInspection,
+  FcBarChart,
 } = require('react-icons/fc');
 
-const sidebarConfigArr = [{
+const sidebarConfigArr = [
+  {
     id: 'design-pattern',
     name: '设计模式',
-    icon: FcIdea
-}, {
+    icon: FcIdea,
+  },
+  {
     id: 'leet-code',
     name: 'leet-code',
-    icon: FcInspection
-}, {
+    icon: FcInspection,
+  },
+  {
     id: 'interview',
     name: '面试',
-    icon: FcCalendar
-}, {
+    icon: FcCalendar,
+  },
+  {
     id: 'js',
     name: 'JavaScript',
-    icon: FcBarChart
-}];
-
+    icon: FcBarChart,
+  },
+];
 
 module.exports = sidebarConfigArr;

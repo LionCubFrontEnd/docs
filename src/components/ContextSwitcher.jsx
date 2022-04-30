@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useAllDocsData } from '@theme/hooks/useDocs';
 import { string } from 'prop-types';
 
-import sidebarConfigArr from '../../sidebarConfig'
+import sidebarConfigArr from '../../sidebarConfig';
 
 const getContext = (id) =>
   sidebarConfigArr.find((context) => context.id === id);
