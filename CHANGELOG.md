@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/LionCubFrontEnd/docs/compare/v1.1.0...v1.2.0) (2022-04-30)
+
+
+### Features
+
+* 添加百度分析 ([#8](https://github.com/LionCubFrontEnd/docs/issues/8)) ([660cb23](https://github.com/LionCubFrontEnd/docs/commit/660cb23244a74a3dd155227713c5f22831976ea8))
+
 # [1.1.0](https://github.com/LionCubFrontEnd/docs/compare/v1.0.0...v1.1.0) (2022-04-20)
 
 
