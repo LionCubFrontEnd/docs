@@ -1,3 +1,4 @@
+const path = require('path');
 const { tailwindPlugin, webpackPlugin } = require('../plugins');
 const pageRef = require('../plugins/pageRef');
 const sidebarConfigArr = require('../../sidebarConfig');
@@ -24,6 +25,7 @@ const sidebarConfig = sidebarConfigArr.map((item) => {
 });
 
 const plugins = [
+  path.resolve(__dirname, './../plugins/plugin-baidu-analytics'),
   tailwindPlugin,
   webpackPlugin,
   ['docusaurus-plugin-sass', {}],
