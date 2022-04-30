@@ -26,6 +26,7 @@ const sidebarConfig = sidebarConfigArr.map((item) => {
 
 const plugins = [
   path.resolve(__dirname, './../plugins/plugin-baidu-analytics'),
+  path.resolve(__dirname, './../plugins/plugin-baidu-push'),
   tailwindPlugin,
   webpackPlugin,
   ['docusaurus-plugin-sass', {}],

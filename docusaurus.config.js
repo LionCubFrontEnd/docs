@@ -72,6 +72,10 @@ module.exports = {
           ...pageOptions,
         },
         blog: false,
+        sitemap: {
+          changefreq: "daily",
+          priority: 0.5,
+        },
       },
     ],
   ],
