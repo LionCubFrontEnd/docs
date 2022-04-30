@@ -1,0 +1,179 @@
+---
+id: bom-learn
+description: BOM 对象知多少
+sidebar_position: 1
+title: BOM 对象知多少
+---
+
+## history 对象
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>history 对象</title>
+</head>
+<body>
+  <script>
+    /* 对于 `history` 对象，这里不太方便展示，就以文字表述了。常用的方法就是 `go` 方法，值设置为 `0` 代表刷新，值为 `1` 代表向前导航，值为 `-1` 代表向后找历史导航。 */
+    console.log(history)
+    setTimeout(function(){
+      history.go(0) //每隔2秒进行刷新
+    },2000)
+  </script>
+</body>
+</html>
+```
+## location 对象
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>location 对象</title>
+</head>
+<body>
+  <from>
+    <input type="text" name="user">
+    <input type="password" name="pwd">
+    <input type="submit">
+  </from>
+  <script>
+    console.log(location.host) // 打印服务器地址+端口号
+    console.log(location.hostname) // 返回服务器地址（没有端口号）
+    console.log(location.port) // 打印服务器端口号
+    console.log(location.search) // 打印地址栏查询条件
+    console.log(location.href) // 打印完整url（已经进行了编码）
+    console.log(location.pathname) // 打印文件目录路径
+    console.log(location.protocol) // 打印协议
+  </script>
+</body>
+</html>
+```
+
+## window 对象中的定时器方法
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>定时器方法</title>
+  </head>
+  <body>
+    <script>
+      window.setTimeout(function () {
+        console.log(2)
+      }, 0)
+      console.log(1)
+      let num = 0
+      let timeId = null
+      timeId = window.setInterval(function() {
+        num++
+        if(num > 5){
+          clearInterval(timeId)
+          return 
+        }
+        console.log(num)
+      },1000)
+    </script>
+  </body>
+</html>
+```
+
+## window 对象常用方法
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>window对象常用方法</title>
+</head>
+<body>
+  <script>
+    window.alert('chocolate')
+    let res = window.confirm('你确认要退出吗？')
+    console.log(res)
+    let val = window.prompt('请输入你喜欢的岗位','前端开发')
+    console.log(val)
+  </script>
+</body>
+</html>
+```
+
+## 位置操作
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>位置操作</title>
+</head>
+<body>
+  <script>
+    // 2秒之后调到某个网站（会产生历史记录，即点击后退按钮会返回原页面）
+    setTimeout(function(){
+      location.href = 'https://yangchaoyi.vip/'
+    },2000)
+
+    // 2秒之后调到某个网站（不会产生历史记录)
+    setTimeout(function(){
+      location.replace('https://yangchaoyi.vip/')
+    },2000)
+
+    // 2秒之后进行重载
+    setTimeout(function(){
+      location.reload()
+    },2000)
+  </script>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+## 如何检测当前浏览器上的插件
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何检测当前浏览器上的插件</title>
+</head>
+<body>
+  <script>
+    console.log(navigator)
+    let hasPlugin = (name) => {
+      name = name.toLowerCase()
+      for(let i=0;i<navigator.plugins.length;i++){
+        if(navigator.plugins[i].name.toLowerCase().indexOf(name) > -1){
+          return true
+        }
+        else{
+          return false
+        }
+      }
+    }
+    alert(hasPlugin('Flash'))
+    alert(hasPlugin('Chrome PDF Plugin'))
+  </script>
+</body>
+</html>
+```
+
+

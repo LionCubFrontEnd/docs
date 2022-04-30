@@ -6,10 +6,10 @@ import { useHistory } from 'react-router-dom';
 import { useAllDocsData } from '@theme/hooks/useDocs';
 import { string } from 'prop-types';
 
-import CATEGORY_CONTEXTS from '../constant/categoryIcon';
+import sidebarConfigArr from '../../sidebarConfig'
 
 const getContext = (id) =>
-  CATEGORY_CONTEXTS.find((context) => context.id === id);
+  sidebarConfigArr.find((context) => context.id === id);
 
 export const getCurrentPageInfo = () => {
   return window.location.pathname.split('/').slice(1);
@@ -20,7 +20,7 @@ const pathExists = (path, data) => {
 };
 
 const ContextSwitcher = ({ className }) => {
-  const [context, setContext] = useState(CATEGORY_CONTEXTS[0]);
+  const [context, setContext] = useState(sidebarConfigArr[0]);
   const data = useAllDocsData();
   const history = useHistory();
 
@@ -89,7 +89,7 @@ const ContextSwitcher = ({ className }) => {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full list-none overflow-auto rounded-md bg-background-100 p-0 py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {CATEGORY_CONTEXTS.map((context) => (
+              {sidebarConfigArr.map((context) => (
                 <Listbox.Option
                   key={context.id}
                   className={({ active }) =>
