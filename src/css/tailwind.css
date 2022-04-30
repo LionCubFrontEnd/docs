@@ -46,8 +46,6 @@
 
     --ifm-toc-border-color: var(--docs-color-border);
 
-    --ifm-navbar-background-color: transparent;
-
     --doc-sidebar-width: 300px !important;
 
     /* Tailwind theming */
@@ -127,10 +125,6 @@ body {
   .navbar {
     backdrop-filter: unset !important
   }
-}
-
-.navbar {
-  backdrop-filter: blur(24px);
 }
 
 .navbar__title {
@@ -746,14 +740,14 @@ html[data-theme='dark'] p {
 
 h1 {
   color: #444950;
-  font-size: 2.5rem!important;
-  font-weight: 599;
+  font-size: 1.7rem!important;
+  font-weight: 599 !important;
 }
 
 html[data-theme='dark'] h1 {
   color: #d9d9d9;
-  font-size: 2.5rem!important;
-  font-weight: 599;
+  font-size: 1.7rem!important;
+  font-weight: 599 !important;
 }
 
 .markdown > h2 {

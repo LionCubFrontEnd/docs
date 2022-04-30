@@ -1,0 +1,600 @@
+---
+id: es6-learn
+description: 系统学习 ES6
+sidebar_position: 1
+title: ES6 学习（class 实现私有属性）
+---
+
+## 引言
+
+在上一篇 [某跳动面试官：说说微信扫码登录背后的实现原理？](https://juejin.im/post/6881597417637511181) 文章发出之后，没想到有挺多点赞的，掘金社区前端小伙伴真是多啊，以后还是多多在掘金社区活跃起来吧，简单说一下我会整理的专栏系列：
+
+之前，一直在 `CSDN` 平台发布博客，[超逸の学习技术博客](https://chocolate.blog.csdn.net/)，发现前端活跃度不是很高，而在掘金社区我看到一系列优秀的文章，点赞数达到上千，访问量好几十万的也有，并且文章质量是真的高，能学习很多知识。
+
+在这里，我会对一个问题进行研究，带着好奇心去看待问题，尽量用简洁易懂的话语呈现给大家，能把别人教会，对于自己而言也是蛮有成就感和收获的。
+
+<hr/>
+
+在此，分享一下上学期IT项目管理老师教课提到的人们能够记住的东西有如下规律：
+
+- 听到的内容的 5%
+- 读过的内容的10%
+- 见过的内容的 30%
+- 讨论过的内容的 50%
+- 亲自做的内容的 75%
+- 教给别人所做过的事情的 90%
+
+
+如若有帮助到您，请**一键三连**，当然，本文表述有问题的地方，欢迎读者指正，也是一个学习的过程，谢谢~
+
+## 回归正文
+
+赶紧回到正题，这个问题也是和上一篇博客一样，也是在今年8月份的时候被问到过，当时知道class这个东西，在社区里面看过一些class继承相关知识，但是没有真正动手敲过代码，犹记得当时对话场景是这样的：
+
+
+面试官：你应该了解过ES6吧？（这个当然），那好，那你知道ES6中有一个class，你可以设计实现它的私有属性吗？
+
+我：emmm（此时我想了想，好像可以用闭包来做），我可以采用闭包的思想来做嘛？
+
+面试官：当然可以（show me the code）
+
+于是乎，我就写下了这一份代码：
+
+```javascript
+class classA{
+	// xxx省略
+	let fun = function () {
+  		var a = 0;
+  		return function () {
+    		console.log(++a);
+  		}
+	}
+	// xxx省略
+}
+```
+其中省略了一点点代码，但总体和上述代码差不多，现在回想过来，当时真是太可笑了，难怪面试官喊停来了一句，语法都不对。同时，当时写的时候也是焦头烂额的，因为这个语法代码也不是很熟，但今天我带着好奇心来解决这个问题。
+
+
+## 为什么会出现 class
+
+其实，学过 `java` 的小伙伴一定对 `class` 熟悉不过了，本人大二大三期间也是各种 `java` 代码写来写去。那为什么 `JS` 里面还要引入 `class` 呢？
+
+在 es6 之前，虽然 JS 和 Java 同样都是 OOP （面向对象）语言，但是在 JS 中，只有对象而没有类的概念。
+
+es6 中 class 的出现拉近了 JS 和传统 OOP 语言的距离。但是，它仅仅是一个**语法糖**罢了，不能实现传统 OOP 语言一样的功能。在其中，比较大的一个痛点就是私有属性问题。
+
+### 何为私有属性？
+
+私有属性是面向对象编程（OOP）中非常常见的一个特性，一般满足以下的特点：
+
+- 能被class内部的不同方法访问，但不能在类外部被访问；
+- 子类不能继承父类的私有属性。
+
+在 Java 中，可以使用 `private` 实现私有变量，但是可惜的是， JS 中并没有该功能。
+
+
+## 私有属性提案
+
+2015年6月，ES6发布成为标准，为了纪念这个历史性时刻，这个标准又被称为ES2015，至此，JavaScript中的 class 从备胎中转正。但是没有解决私有属性这个问题，产生了一个提案——在属性名之前加上 `#` ，用于表示私有属性。
+
+```javascript
+class Foo {
+  #a;  // 定义私有属性
+  constructor(a, b) {
+    this.#a = a;
+    this.b = b
+  }
+}
+```
+
+>上述代码私有属性的声明，需要先经过Babel等编译器编译后才能正常使用。
+
+至于为什么不用 `private` 关键字呢？参考大佬说的就是有一大原因是向 Python 靠拢，毕竟从 es6 以来， JS 一直向着 Python 发展。
+
+
+## 如何设计实现私有属性呢？
+
+上文我们介绍了class 出现原因，以及它没有解决私有属性这个问题，那么我们作为 `JSer` 们，如何自己设计一下呢？带着好奇心来探讨一下吧：
+
+
+### 约定命名
+目前使用最广的方式：**约定命名**，既然还没有解决，我们不是可以自己定义一下嘛，对于特殊命名的就把它当做私有属性使用不就可以了吗？大家都遵循这个规范，不就解决这个问题了吗？
+
+```javascript
+/* 约定命名 */
+class ClassA {
+  constructor(x) {
+    this._x = x;
+  }
+  getX() {
+    return this._x;
+  }
+}
+
+let classa = new ClassA(1);
+/* 此时可以访问我们自定义私有属性命名的_x */
+console.log(classa._x); // 1
+console.log(classa.getX()); // 1
+```
+显然，上述方法简单方便，大家按照规范来就可以了，也比较好阅读他人代码。
+
+### 闭包
+
+闭包的一个好处就是可以保护内部属性，也是我开头想要实现的一种方式，做法就是将属性定义在 `constructor` 作用域内，如下代码：
+
+```javascript
+/* 闭包 */
+class ClassB {
+  constructor(x) {
+    let _x = x;
+    this.getX = function(){
+      return _x;
+    }
+  }
+}
+let classb = new ClassB(1);
+/* 此时不可以访问我们自定义私有属性命名的_x */
+console.log(classb._x); // undefined
+console.log(classb.getX()); // 1
+```
+
+显然，如果私有属性越来越多，那么看起来就很臃肿，对后续维护造成了一定的麻烦，对于他人阅读也是不太友好。同时呢，引用私有变量的方法又不能定义在原型链上。
+
+
+### 进阶版闭包
+可以通过  `IIFE` （立即执行函数表达式） 建立一个闭包，在其中建立一个变量以及 class ，通过 class 引用变量实现私有变量。
+
+```javascript
+/* 进阶版闭包 */
+const classC = (function () {
+  let _x;
+
+  class ClassC {
+    constructor(x) {
+      _x = x;
+    }
+    getX() {
+      return _x;
+    }
+  }
+  return ClassC;
+})();
+
+let classc = new classC(3);
+/* 此时不可以访问我们自定义私有属性命名的_x */
+console.log(classc._x); // undefined
+console.log(classc.getX()); // 3
+```
+
+这种方式就有点 **模块化** 的思想了，关于模块化的知识，推荐之前的这篇文章：
+
+<a href="https://juejin.im/post/6881241853258104839">「查漏补缺」深度剖析JavaScript ES5/AMD/CMD/COMMONJS/ES6模块化（加薪必备）| 掘金技术征文-双节特别篇</a>
+
+
+<hr/>
+
+### 闭包的做法产生的问题？
+上述，我们用了闭包和进阶版闭包来解决私有属性这个问题，但是这是有问题的，我们以进阶版闭包为例：
+
+```javascript
+/* 进阶版闭包带来的问题 */
+const classC = (function () {
+  let _x;
+
+  class ClassC {
+    constructor(x) {
+      _x = x;
+    }
+    getX() {
+      return _x;
+    }
+  }
+  return ClassC;
+})();
+
+let classc1 = new classC(3);
+/* 此时不可以访问我们自定义私有属性命名的_x */
+console.log(classc1._x); // undefined
+console.log(classc1.getX()); // 3
+
+/* 问题引出：此时新创建一个实例 */
+let classc2 = new classC(4);
+/* 出现了问题：实例之间会共享变量 */
+console.log(classc1.getX()); // 4
+```
+从上述代码可以发现，用闭包创建私有变量是不行的，实例之间会共享变量，就好像几个人都实例化了，但是操作地还是同一个属性，这显然是不可取的。
+
+
+### Symbol
+利用 `Symbol` 变量可以作为对象 `key` 的特点，我们可以模拟实现更真实的私有属性。
+
+```javascript
+/* Symbol */
+const classD = (function () {
+  const _x = Symbol('x');
+  class ClassD {
+    constructor(x) {
+      this[_x] = x;
+    }
+    getX() {
+      return this[_x];
+    }
+  }
+  return ClassD;
+})();
+
+let classd = new classD(4);
+/* 此时不可以访问我们自定义私有属性命名的_x */
+console.log(classd._x); // undefined
+console.log(classd.getX()); // 4
+classd[_x] = 1;
+console.log(classd[_x]); // ReferenceError: _x is not defined
+```
+
+关于上述代码，我参考了大佬文章底下评论区的回答：
+
+>Sysmol要配合 import/export 模板语法。比如A.js里面你定义了class A和Symbol（就用你的写法），对外只暴露class A。然后在别的js文件引入class A实例化，拿不到Symbol的值，而且无法通过'.'去访问变量名（Symbol唯一，不暴露外界拿不到）。这样才是私有。
+
+通过模板化的角度，我们对外暴露 `ClassD`，`Symbol` 唯一，不会暴露，外界拿不到，但是这个也不是毫无破绽，看如下代码：
+
+```javascript
+console.log(classd[Object.getOwnPropertySymbols(classd)[0]]); // 4
+```
+
+原来，ES6 的 `Object.getOwnPropertySymbols` 可以获取symbol属性，今天又学到了新东西 `(*^▽^*)`
+
+为了解决上述问题，我们又要引出一个新的东西：**WeakMap** 
+
+
+### WeakMap 
+
+```javascript
+/* WeakMap  */
+const classE = (function () {
+  const _x = new WeakMap();
+  class ClassE {
+    constructor(x) {
+      _x.set(this, x);
+    }
+    getX() {
+      return _x.get(this);;
+    }
+  }
+  return ClassE;
+})();
+
+let classe = new classE(5);
+/* 此时不可以访问我们自定义私有属性命名的_x */
+console.log(classe._x); // undefined
+console.log(classe.getX()); // 5
+```
+这种方式就很好解决了私有属性的问题，至于 `WeakMap 和 Map` 相关知识，我打算在下一篇文章继续探讨，这个知识目前也不算是特别了解，大概了解不能遍历、弱引用这些，可以关注后续的文章。
+
+
+### 关于 WeakMap 补充更新
+
+<hr/>
+
+10月12日补充更新
+
+在评论区@HsuYang 小伙伴的提出的问题：如果是要支持多个私有变量的话，这儿用Map有没有啥问题呢？
+
+于是我就尝试了一下多个私有变量，先看如下代码：
+
+```javascript
+/* WeakMap  */
+const classE = (function () {
+  const _x = new WeakMap();
+  class ClassE {
+    constructor(x, y) {
+      _x.set(this, x);
+      _x.set(this, y);
+    }
+    getX() {
+      return _x.get(this);;
+    }
+  }
+  return ClassE;
+})();
+
+let classe = new classE(5, 6);
+/* 此时不可以访问我们自定义私有属性命名的_x */
+console.log(classe.getX()); // 6
+```
+诶，发现问题了没有，我们最后输出的只有 `_y` 这个私有属性，原来出现了**覆盖问题**，那么该如何解决这个问题呢？
+
+<hr/>
+
+既然私有属性要和实例进行关联，那么是不是可以创建一个包含所有私有属性对应的对象来维护呢？这样所有私有属性就都存储在其中了，也就解决多个私有变量问题啦，同时，这种技术也有好处，就是在遍历属性时或者在执行 `JSON.stringify` 时不会展示出实例的私有属性。
+
+但它依赖于一个放在类外面的可以访问和操作的 `WeakMap` 变量。
+
+```javascript
+const map = new WeakMap();
+// 创建一个在每个实例中存储私有变量的对象
+const internal = (obj) => {
+  if (!map.has(obj)) {
+    map.set(obj, {});
+  }
+  return map.get(obj);
+}
+
+class ClassE {
+  constructor(name, age) {
+    internal(this).name = name;
+    internal(this).age = age;
+  }
+  get userInfo() {
+    return '姓名：' + internal(this).name + ',年龄：' + internal(this).age;
+  }
+}
+
+const classe1 = new ClassE('Chocolate', 18);
+const classe2 = new ClassE('Lionkk', 19);
+
+console.log(classe1.userInfo); // 姓名：Chocolate,年龄：18
+console.log(classe2.userInfo); // 姓名：Lionkk,年龄：19
+/* 无法访问私有属性 */
+console.log(classe1.name); // undefined
+console.log(classe2.age); // undefined
+```
+
+### Proxy
+
+在评论区@蜀 黍 小伙伴提出可以用 **代理设置拦截** 这种方式来做，现在来补充一下。
+
+
+Proxy 是 JavaScript 中一项美妙的新功能，它将允许你有效地将对象包装在名为 Proxy 的对象中，并拦截与该对象的所有交互。我们将使用 Proxy 并遵照上面的 **命名约定** 来创建私有变量，但可以让这些私有变量在类外部访问受限。
+
+Proxy 可以拦截许多不同类型的交互，但我们要关注的是 `get` 和 `set` ，Proxy 允许我们分别拦截对一个属性的读取和写入操作。创建 Proxy 时，你将提供两个参数，第一个是打算包裹的**实例**，第二个是您定义的希望拦截不同方法的 **“处理器” 对象**。
+
+
+我们的处理器将会看起来像是这样：
+
+
+```javascript
+const handler = {
+  get: function(target, key) {
+    if (key[0] === '_') {
+      throw new Error('Attempt to access private property');
+    }
+    return target[key];
+  },
+  set: function(target, key, value) {
+    if (key[0] === '_') {
+      throw new Error('Attempt to access private property');
+    }
+    target[key] = value;
+  }
+};
+```
+
+在每种情况下，我们都会检查被访问的属性的名称是否以下划线开头，如果是的话我们就抛出一个错误从而阻止对它的访问。
+
+通过以上方法保留使用 `instanceof` 的能力（闭包那一块就出现了这个问题），但是此时又有一个新的问题：
+
+当我们尝试执行 `JSON.stringify` 时会出现问题，因为它试图对私有属性进行格式化。为了解决这个问题，我们需要重写 `toJSON` 函数来仅**返回“公共的”属性**。我们可以通过更新我们的 `get` 处理器来处理 `toJSON` 的特定情况：
+
+>注：这将覆盖任何自定义的 toJSON 函数。
+
+
+```javascript
+ get: function(target, key) {
+  if (key[0] === '_') {
+    throw new Error('Attempt to access private property');
+  } else if (key === 'toJSON') {
+    const obj = {};
+    for (const key in target) {
+      if (key[0] !== '_') {           // 只复制公共属性
+        obj[key] = target[key];
+      }
+    }
+    return () => obj;
+  }
+  return target[key];
+}
+```
+
+那么我们就可以整合一下代码了：
+
+```javascript
+class Student {
+  constructor(name, age) {
+    this._name = name;
+    this._age = age;
+  }
+  get userInfo() {
+    return '姓名：' + this._name + ',年龄：' + this._age;
+  }
+}
+
+const handler = {
+  get: function (target, key) {
+    if (key[0] === '_') { // 访问私有属性，返回一个 error
+      throw new Error('Attempt to access private property');
+    } else if (key === 'toJSON') {
+      const obj = {};
+      for (const key in target) { // 只返回公共属性
+        if (key[0] !== '_') {
+          obj[key] = target[key];
+        }
+      }
+      return () => obj;
+    }
+    return target[key]; // 访问公共属性，默认返回
+  },
+  set: function (target, key, value) {
+    if (key[0] === '_') {
+      throw new Error('Attempt to access private property');
+    }
+    target[key] = value;
+  }
+}
+
+const stu = new Proxy(new Student('Chocolate', 21), handler);
+
+console.log(stu.userInfo);           // 姓名：Chocolate,年龄：21
+console.log(stu instanceof Student); // true
+console.log(JSON.stringify(stu));  // "{}"
+for (const key in stu) {           
+  console.log(key);  // _name  _age
+}
+```
+
+
+我们现在已经封闭了我们的私有属性，而预计的功能仍然存在，唯一的警告是我们的私有属性仍然可被遍历。`for(const key in stu)` 会列出 `_name` 和 `_age` 。
+
+<hr/>
+
+为了解决上述私有属性遍历问题，我又想到了可以操作对象属性对应的属性描述符，然后配置 `enumerable `，正好 `Proxy` 可以处理这个问题，它可以拦截对 `getOwnPropertyDescriptor` 的调用并操作我们的私有属性的输出，代码如下：
+
+```javascript
+getOwnPropertyDescriptor(target, key) {
+  const desc = Object.getOwnPropertyDescriptor(target, key);
+  if (key[0] === '_') {
+    desc.enumerable = false;
+  }
+  return desc;
+}
+```
+
+详细内容可参考：
+
+<a href="https://cloud.tencent.com/developer/section/1191908">Object.getOwnPropertyDescriptor 参考文档</a>
+
+终于，我们迎来了最终完整版本，祝贺 `(*^▽^*)`，整合代码如下：
+
+```javascript
+class Student {
+  constructor(name, age) {
+    this._name = name;
+    this._age = age;
+  }
+  get userInfo() {
+    return '姓名：' + this._name + ',年龄：' + this._age;
+  }
+}
+
+const handler = {
+  get: function (target, key) {
+    if (key[0] === '_') { // 访问私有属性，返回一个 error
+      throw new Error('Attempt to access private property');
+    } else if (key === 'toJSON') {
+      const obj = {};
+      for (const key in target) { // 只返回公共属性
+        if (key[0] !== '_') {
+          obj[key] = target[key];
+        }
+      }
+      return () => obj;
+    }
+    return target[key]; // 访问公共属性，默认返回
+  },
+  set: function (target, key, value) {
+    if (key[0] === '_') {
+      throw new Error('Attempt to access private property');
+    }
+    target[key] = value;
+  },
+  // 解决私有属性能遍历问题，通过访问属性对应的属性描述符，然后设置 enumerable 为 false
+  getOwnPropertyDescriptor(target, key) {
+    const desc = Object.getOwnPropertyDescriptor(target, key);
+    if (key[0] === '_') {
+      desc.enumerable = false;
+    }
+    return desc;
+  }
+}
+
+const stu = new Proxy(new Student('Chocolate', 21), handler);
+
+console.log(stu.userInfo);           // 姓名：Chocolate,年龄：21
+console.log(stu instanceof Student); // true
+console.log(JSON.stringify(stu));  // "{}"
+for (const key in stu) {           // No output 不能遍历私有属性
+  console.log(key);
+}
+stu._name = 'Lionkk';                  // Error: Attempt to access private property
+```
+
+
+
+
+### 新式做法
+
+就发展趋势来看， TS 已经成为前端必备的技能之一，`TypeScript` 的 private 很好解决了私有属性这个问题，后续学习了 `ts` 之后再补充吧。
+
+
+### 附：TypeScript 中的处理方式
+
+TypeScript 是 JavaScript 的一个超集，它会编译为原生 JavaScript 用在生产环境。允许指定私有的、公共的或受保护的属性是 TypeScript 的特性之一。
+
+
+```javascript
+class Student {
+  private name;
+  private age;
+
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  get userInfo() {
+    return '姓名：' + this.name + ',年龄：' + this.age;
+  }
+}
+
+const stu = new Student('Chocolate', 21);
+console.log(stu.userInfo);           // 姓名：Chocolate,年龄：21
+```
+
+使用 TypeScript 需要注意的重要一点是，它只有在 **编译** 时才获知这些类型，而私有、公共修饰符在编译时才有效果。如果你尝试访问 `stu.name`，你会发现，居然是可以的。只不过 TypeScript 会在编译时给你报出一个错误，但不会停止它的编译。
+
+```javascript
+// 编译时错误：属性 ‘name’ 是私有的，只能在 ‘Student ’ 类中访问。
+console.log(stu.name); // 'Chocolate'
+```
+TypeScript 不会自作聪明，不会做任何的事情来尝试阻止代码在运行时访问私有属性。我只把它列在这里，也是让大家意识到它并不能直接解决问题。
+
+
+另外，TypeScript  的 class 私有变量最终编译也是通过 `WeakMap` 来实现的，来自评论区小伙伴们的解答~
+
+
+<hr/>
+
+到此，本文就结束了，后续的文章也会加快更近，带着好奇心去学习，去思考~
+
+如若小伙伴有更加不错的方式，欢迎交流，当然，本文或许存在疑点，欢迎大家指正，也是一个学习的过程，谢谢~
+
+
+特此感谢评论区的小伙伴们，对于 **设计一下ES6中 class 实现私有属性** 这个问题我又有了更深入的理解，感谢 ` Thanks♪(･ω･)ﾉ`
+
+
+## 本文参考
+
+- [浅谈 class 私有变量](https://juejin.im/post/6844903748997742605)
+- [ES6 Class中实现私有属性的几种方法](https://juejin.im/post/6844903880174600205)
+- [ES6模拟私有属性+前端100道面试题](https://libin1991.github.io/2019/07/10/ES6%E6%A8%A1%E6%8B%9F%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7-%E5%89%8D%E7%AB%AF100%E9%81%93%E9%9D%A2%E8%AF%95%E9%A2%98/)
+
+
+<a href=""></a>
+
+>感谢以上大佬的文章，尊重劳动成果，特此提出原文链接。
+
+## 最后
+文章产出不易，还望各位小伙伴们支持一波！
+
+往期精选：
+
+[小狮子前端の笔记仓库](https://github.com/Chocolate1999/Front-end-learning-to-organize-notes)
+[leetcode-javascript：LeetCode 力扣的 JavaScript 解题仓库，前端刷题路线（思维导图）](https://github.com/Chocolate1999/leetcode-javascript)
+
+
+小伙伴们可以在Issues中提交自己的解题代码，🤝 欢迎Contributing，可打卡刷题，Give a ⭐️ if this project helped you!
+
+[访问超逸の博客](https://yangchaoyi.vip/)，方便小伙伴阅读玩耍~
+
+```javascript
+学如逆水行舟，不进则退
+```
+

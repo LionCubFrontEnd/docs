@@ -1,6 +1,6 @@
 const navbarItem = [
   {
-    label: 'Home',
+    label: '首页',
     to: '/',
     activeBaseRegex: '(^/docs)',
   },
