@@ -5,6 +5,12 @@ const navbarItem = [
     activeBaseRegex: '(^/docs)',
   },
   {
+    label: '里程碑',
+    to: '/marker',
+    activeBasePath: '/marker',
+    position: 'right',
+  },
+  {
     label: '加入知识星球',
     to: '/zsxq',
     activeBasePath: '/zsxq',

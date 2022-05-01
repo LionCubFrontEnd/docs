@@ -1,7 +1,5 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import { Table, Tag, Space } from 'antd';
-
 const color = ['geekblue', 'green', 'volcano'];
 const columns = [
   {

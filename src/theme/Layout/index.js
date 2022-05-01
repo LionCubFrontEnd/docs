@@ -15,6 +15,7 @@ import LayoutProviders from '@theme/LayoutProviders';
 import LayoutHead from '@theme/LayoutHead';
 import useKeyboardNavigation from '@theme/hooks/useKeyboardNavigation';
 import { ThemeClassNames } from '@docusaurus/theme-common';
+import 'antd/dist/antd.css';
 import './styles.css';
 
 function Layout(props) {
