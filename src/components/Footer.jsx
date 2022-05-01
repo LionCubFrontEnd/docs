@@ -71,13 +71,13 @@ export default function Footer() {
             href="https://vercel.com/?utm_source=digital-support-notes&utm_campaign=oss"
             className="vercel-callout"
           >
-            Hosted and sponsored by ▲ Vercel
+            Hosted by ▲ Vercel
           </a>
         </div>
         <div className="mt-3 w-full text-center text-sm text-text-100">
-          Copyright © Chocolate & HearLing 2022. All rights reserved. <br />
-          Coded with ❤️ by <a href="https://yangchaoyi.vip">小狮子</a> &{' '}
-          <a href="https://github.com/LionCubFrontEnd/docs">the community</a>
+          Copyright © 2022. All rights reserved. <br />
+          Coding ❤️ by <a href="https://yangchaoyi.vip">Chocolate</a> &{' '}
+          <a href="https://hearling.github.io/">HearLing</a>
         </div>
       </div>
     </footer>
