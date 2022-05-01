@@ -5,6 +5,12 @@ const navbarItem = [
     activeBaseRegex: '(^/docs)',
   },
   {
+    label: '加入知识星球',
+    to: '/zsxq',
+    activeBasePath: '/zsxq',
+    position: 'right'
+  },
+  {
     href: 'https://github.com/LionCubFrontEnd/docs',
     position: 'right',
     className: 'header-github-link',
