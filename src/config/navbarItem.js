@@ -8,7 +8,7 @@ const navbarItem = [
     label: '加入知识星球',
     to: '/zsxq',
     activeBasePath: '/zsxq',
-    position: 'right'
+    position: 'right',
   },
   {
     href: 'https://github.com/LionCubFrontEnd/docs',
