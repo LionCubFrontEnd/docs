@@ -3,7 +3,7 @@ import Head from '@docusaurus/Head';
 import { useTitleFormatter } from '@docusaurus/theme-common';
 
 const getOgImageURL = (title) =>
-  `https://meta-image.vercel.app/**${title}**.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fnotes.nayanpatel.net%2Fsitelogo.svg`;
+  `https://meta-image.vercel.app/**${title}**.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fdocs.yangchaoyi.vip/docs%2Fsitelogo.svg`;
 
 export default function Seo({ title, description, keywords, image }) {
   const metaTitle = useTitleFormatter(title);

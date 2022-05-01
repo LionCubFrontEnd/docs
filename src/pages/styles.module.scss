@@ -1,0 +1,8 @@
+:global {
+  html[data-theme='dark'] .ant-timeline-item-content{
+    color: #f5f5f5;
+  }
+  html[data-theme='dark'] .ant-timeline-item-head {
+    background-color:unset
+  }
+}
