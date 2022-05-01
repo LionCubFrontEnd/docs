@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/LionCubFrontEnd/docs/compare/v1.2.0...v1.3.0) (2022-05-01)
+
+
+### Features
+
+* 添加社招一篇面经 & 里程碑页面开发 ([#13](https://github.com/LionCubFrontEnd/docs/issues/13)) ([8687707](https://github.com/LionCubFrontEnd/docs/commit/8687707d2a45a4f7fa592d247a5feb597d736443))
+
 # [1.2.0](https://github.com/LionCubFrontEnd/docs/compare/v1.1.0...v1.2.0) (2022-04-30)
 
 
