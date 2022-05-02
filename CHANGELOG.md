@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/LionCubFrontEnd/docs/compare/v1.3.0...v1.3.1) (2022-05-02)
+
+
+### Bug Fixes
+
+* update info ([#20](https://github.com/LionCubFrontEnd/docs/issues/20)) ([10fc047](https://github.com/LionCubFrontEnd/docs/commit/10fc0472bab1d27ea7ae71027403003365a28ff6))
+
 # [1.3.0](https://github.com/LionCubFrontEnd/docs/compare/v1.2.0...v1.3.0) (2022-05-01)
 
 
