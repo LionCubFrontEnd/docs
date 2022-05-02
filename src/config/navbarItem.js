@@ -5,6 +5,12 @@ const navbarItem = [
     activeBaseRegex: '(^/docs)',
   },
   {
+    label: '前端学习路线',
+    to: '/roadmap',
+    activeBasePath: '/roadmap',
+    position: 'left',
+  },
+  {
     label: '里程碑',
     to: '/marker',
     activeBasePath: '/marker',

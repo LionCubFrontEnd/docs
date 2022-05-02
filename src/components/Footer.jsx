@@ -76,8 +76,18 @@ export default function Footer() {
         </div>
         <div className="mt-3 w-full text-center text-sm text-text-100">
           Copyright © 2022. All rights reserved. <br />
-          Coding ❤️ by <a href="https://yangchaoyi.vip">Chocolate</a> &{' '}
-          <a href="https://hearling.github.io/">HearLing</a>
+          Coding ❤️ by{' '}
+          <a href="https://yangchaoyi.vip" target="_blank" rel="noreferrer">
+            Chocolate
+          </a>{' '}
+          &{' '}
+          <a
+            href="https://hearling.github.io/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            HearLing
+          </a>
         </div>
       </div>
     </footer>
