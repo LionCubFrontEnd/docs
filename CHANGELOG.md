@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/LionCubFrontEnd/docs/compare/v1.3.1...v1.4.0) (2022-05-05)
+
+
+### Features
+
+* 添加星球介绍 ([#22](https://github.com/LionCubFrontEnd/docs/issues/22)) ([6f76f17](https://github.com/LionCubFrontEnd/docs/commit/6f76f175810741c21e021acf678dfb903dcbf020))
+
 ## [1.3.1](https://github.com/LionCubFrontEnd/docs/compare/v1.3.0...v1.3.1) (2022-05-02)
 
 
