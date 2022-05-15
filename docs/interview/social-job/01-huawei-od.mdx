@@ -199,11 +199,11 @@ Promise.prototype.then = function (onFulfilled, onRejected) {
 - Generator 
 - async await
 
-###  原型和原型链  考的是继承，多说自己知道的实现继承的方式
-
+###  原型和原型链  
+考的是继承，多说自己知道的实现继承的方式
 
 - 原型链继承
-   - ![image.png](https://cdn.nlark.com/yuque/0/2022/png/12423448/1649404660397-9e780cce-3b6f-4e7f-b064-63d0b02d8a93.png#clientId=u5beaa2c8-ba34-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=502&id=u3cf1b1bd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=502&originWidth=733&originalType=binary&ratio=1&rotation=0&showTitle=false&size=93041&status=done&style=none&taskId=u4296cdb9-9457-4f69-817b-b60908b9136&title=&width=733)
+   - ![image.png](img/继承.png)
 ```javascript
 关键在于
 Sub.prototype = new Super()
@@ -218,7 +218,7 @@ Sub.prototype = new Super()
    - 在原型式基础上增强对象返回构造函数
 - 寄生组合式继承
    - 最成熟的解决方案
-   - ![image.png](https://cdn.nlark.com/yuque/0/2022/png/12423448/1649406273328-a6ddcac7-379d-4040-b4fc-6a599522d254.png#clientId=u5beaa2c8-ba34-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=461&id=u856efcb6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=461&originWidth=923&originalType=binary&ratio=1&rotation=0&showTitle=false&size=78557&status=done&style=none&taskId=u6d8597f9-d279-471c-9699-2d52f359f02&title=&width=923)
+   - ![image.png](img/继承2.png)
    - tips其中sub里是使用Super.call(this)并在此基础上进行增强
 - 混入继承
    - 使用Object..assign(...多个原型 )
@@ -282,9 +282,81 @@ Sub.prototype = new Super()
 
 ### 在公司做的工作，负责什么
 
-这个自己总结吧，我总结我就写到私人链接了
+这个需要自己总结，不可或缺，如果你在前公司负责的项目价值高。那么很有可能面试官会画时间多和你聊公司项目。所以还是要引起注意。
 
 ### 杨辉三角 
+网上直接搜就能搜出答案哈，很简单的一道输出题，要快的写完~
+```
+   1
+  121 
+ 12321
+1234321
+```
 
-1<br />  121<br /> 12321<br />1234321
+## 二面
 
+### 问业务方面
+###  React 相关问题
+###  React生命周期 
+主要点：挂载-> 更新-> 卸载-> （Error）
+   1. ![image.png](img/react生命周期.png)
+   1. 官网必须看，结合项目看，自己做也可以，深入的可以看源码-React技术揭秘
+###  怎么理解React一切皆组件
+   1. React采用组件化的思想，我们编写函数hook或者class其实都是在写组件，React中是编写jsx，React会将jsx声明的组件通过bebal转化成React.createElement形成虚拟DOM树。
+   1. React的虚拟DOM树就是一个大的组件树。
+   1. 组件可以是一个函数或者一个类，几首数据输入，处理它并返回UI中呈现的React元素。
+###  不同组件数据的传递 
+props、回调、父组件统一、useContext搭配redux
+###  Vue angular
+就简单的了解一下我对这两个库的理解情况
+###  webpack怎么做优化  
+ B站有视频自学的   两个环境：打包速度、调试；打包速度、运行性能
+   1. webpack删除冗余代码
+   1. 混淆打包
+### 安全方面：XSS CSRF
+   1. XSS跨站脚本攻击：
+      1. 输入脚本进行过滤转码
+      1. 利用CSP（"内容安全策略"）
+      1. HttpOnly
+      1. 验证码
+      1. 限制长度（'效果不大，有脚本缩短的办法'）
+   2. CSRF跨域请求伪造
+      1. cookie SameSite属性
+      1. 验证post请求的Origin
+      1. CSRF Token
+      1. x-frame-option 限制iframe展示
+   3. 平时会用这些策略嘛？
+### http协议
+   1. http1.0和http1.1
+      1. **缓存处理**：etag、if-none-match
+      1. **长连接**
+      1. 增加错误码
+      1. host头处理
+   2. http2.0
+      1. **二进制协议**：头和数据帧
+      1. **数据流**
+      1. **多路复用 **- 解决队头阻塞
+      1. 头信息压缩
+      1. 推送 **服务器主动推送**
+   3. http3.0
+      1. 解决tcp它的队头阻塞 -> **udp协议**
+         1. 基于**TCP**的HTTP/2，数据还是要一帧一帧的发送和接收，一旦某一个流的数据有丢包，则同样会阻塞在它之后传输的流数据传输。而基于**UDP**的QUIC协议则可以更为彻底地解决这样的问题，让不同的流之间真正的实现相互独立传输，互不干扰。
+      2. **切换网络时的连接保持**
+         1. 基于TCP的协议，由于切换网络之后，IP会改变，因而之前的**连接不可能继续保持**。而基于UDP的QUIC协议，则可以内建与TCP中不同的连接标识方法，从而在**网络完成切换之后，恢复之前与服务器的连接。**
+###  https
+
+[https://juejin.cn/post/6857287743966281736#heading-61](https://juejin.cn/post/6857287743966281736#heading-61)
+
+   1. 非对称加密
+   1. 数字证书
+   1. 数字签名
+   1. ![image.png](img/https.png)
+###  websorket
+   1. 原理
+      1. 基于tcp连接传输数据
+      1. 通过http协议建立通道，在此基础进行websocket通信；与http的区别：
+      1. ![image.png](img/websorket.png)
+   2. 持久通信 - 应用层协议也是基于 tcp的
+   2. **服务器可以主动推送 ** - 双向
+###  算法：约瑟夫环
+（脑筋急转弯）我是做过这道题，但公式不记得了hh推了一会公式做出来的。
