@@ -1,0 +1,189 @@
+---
+id: sangfor
+description: 深信服社招前端面试总结与复盘
+sidebar_position: 2
+title:  深信服
+---
+
+## 前言
+深信服公司的技术栈主要都是Vue
+## 一面
+没有问很多“常规”的面试题，喜欢从业务出发聊。
+### Node 爬虫 
+我的项目有写，所以问了
+   1. 爬取流程 Python
+   1. 反爬虫考虑
+### 编码题：数组去重
+不能用新的数组存，不能用数组方法,不能用set
+
+```javascript
+let obj = {};//hash的意思
+for (let i = 0; i < arr.length; i++) {
+  let item = arr[i]
+  if (obj[item] !== undefined) {
+    //arr.splice(i, 1);
+    //交换
+    arr[i] = arr[arr.length-1]
+    arr.length--;
+    i--; // 解决删除元素后，数组塌陷问题，这里可以通过从后遍历防止塌陷
+    continue;
+  }
+  obj[item] = item
+}
+
+// arr: [1, 2, 4, null, 3, "abc", 3, 5]
+
+```
+
+### ES6 
+ES6新特性说一半，然后让我实现数据过滤
+通过 map filter  
+
+### 怎么写组件的
+   1. 确定组件的属性方法 - 输入输出
+   2. 确定类型、应该是受控的还是就是展示组件
+   3. 确定数据流、业务逻辑
+   4. 考虑可以做的优化
+### React实现双向数据绑定 
+使用 value onChange 
+
+### 自己的优势在哪里
+按自己的情况答就好了，切记自大的表达方式
+
+### 性能优化 
+详细可见上一篇的答案
+追问：懒加载，长列表虚拟列表
+### css
+flex定位，三个参数要熟悉
+相对定位与绝对定位
+###  转Vue的意愿
+###  离职原因
+社招几乎必问，一定要好好准备
+
+## 二面
+相对来说更加常规
+###  性能优化 -已有题解
+   1. 虚拟列表实现原理，说用的什么库实现的，Reactwindow实现的 ，其实想问的是库里是怎么实现的
+   2. React性能优化常用的手段 useMemo 、React.memo useCalback  key
+###  问项目
+###  怎么做适配的
+原因是有个项目做大屏的，
+可以参考这篇文章：[https://blog.csdn.net/chenjuan1993/article/details/81710022](https://blog.csdn.net/chenjuan1993/article/details/81710022)
+   1. rem
+   1. vm、vh
+   1. px为主，vx和vxxx（vw/vh/vmax/vmin）为辅，搭配一些flex（推荐）
+   1. 媒体查询：代码量会大，不好维护，但方法简单成本低
+###  设计模式
+能说多少就说多少吧
+后面引到了下一个题：
+###  EventBus手写
+```javascript
+class EventEmitter {
+  constructor() {
+    // 维护事件及监听者
+    this.listeners = {};
+  }
+  /**
+   * 注册事件监听者
+   * @param {String} type 事件类型
+   * @param {Function} cb 回调函数
+   */
+  on(type, cb) {
+    if (!this.listeners[type]) {
+      this.listeners[type] = [];
+    }
+    this.listeners[type].push(cb);
+  }
+  /**
+   * 发布事件
+   * @param {String} type 事件类型
+   * @param  {...any} args 参数列表，把emit传递的参数赋给回调函数
+   */
+  emit(type, ...args) {
+    if (this.listeners[type]) {
+      this.listeners[type].forEach((cb) => {
+        cb(...args);
+      });
+    }
+  }
+  /**
+   * 移除某个事件的一个监听者
+   * @param {String} type 事件类型
+   * @param {Function} cb 回调函数
+   */
+  off(type, cb) {
+    if (this.listeners[type]) {
+      const targetIndex = this.listeners[type].findIndex((item) => item === cb);
+      if (targetIndex !== -1) {
+        this.listeners[type].splice(targetIndex, 1);
+      }
+      if (this.listeners[type].length === 0) {
+        delete this.listeners[type];
+      }
+    }
+  }
+  // 在上节代码新增
+  /**
+   * 某个事件只监听一次
+   * @param {String} type 事件类型
+   * @param {Function} cb 回调函数
+   */
+once(type, cb) {
+   const execFn = () => {
+     cb.apply(this);
+     this.off(type, execFn);
+   };
+   this.on(type, execFn);
+}
+
+/**
+ * 移除某个事件的所有监听者
+ * @param {String} type 事件类型
+ */
+offAll(type) {
+    if (this.listeners[type]) {
+        delete this.listeners[type]
+    }
+}
+
+}
+// 创建事件管理器实例
+const ee = new EventEmitter();
+// 注册事件监听者
+ee.on("设计模式",fn1 = function (price) {
+    console.log(`HearLing订阅设计模式这本书的价格是:${price}`);
+  }
+);
+ee.on("你不知道JavaScript", function (price) {
+  console.log(`HearLing订阅你不知道JavaScript这本书的价格是:${price}`);
+});
+ee.emit("设计模式", 100); // 输出HearLing订阅设计模式这本书的价格是:100
+
+ee.off("设计模式", fn1);
+ee.emit("设计模式"); // 此时事件监听已经被移除，没有console.log
+
+```
+
+###  React 源码
+key 有哪些作用、diff 过程 
+可以看卡颂老师的React技术揭秘（基于源码写的文章），有详细的介绍
+###  单链表的反转 
+LeetCode有原题，要求不要开辟新的空间
+
+```javascript
+var reverseList = function(head) {
+    let pre = null
+    let cur = head
+    while(cur!==null){
+        let next = cur.next
+        cur.next = pre
+        pre = cur
+        cur = next 
+    }
+    return pre
+};
+```
+###  宏任务微任务的输出题
+常考题，要会分析，能说明白
+###  算法题
+对象获取有child的id，数据过滤，递归的方式去做
