@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/LionCubFrontEnd/docs/compare/v1.4.0...v1.5.0) (2022-07-17)
+
+
+### Features
+
+* 修改 readme 和更改整站 font-size ([7081a37](https://github.com/LionCubFrontEnd/docs/commit/7081a37cf2d6d729a4589b2ded2a6c953a084395))
+
 # [1.4.0](https://github.com/LionCubFrontEnd/docs/compare/v1.3.1...v1.4.0) (2022-05-05)
 
 
