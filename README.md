@@ -26,10 +26,10 @@
 
 ## 结尾
 
-一起交流学习可以加企鹅群【666151691】
+> 粉丝 QQ 群号: 666151691，**2000** 人大群（加群备注小狮子），加入一起学习。
 
 
-<font color=chocolate>欢迎关注微信公众号：小狮子前端</font>
+欢迎关注微信公众号：小狮子前端，关注回复「小狮子」领取不断更新的前端学习资料~
 
 ![](https://img-blog.csdnimg.cn/img_convert/43c196751f4984c71011557d06e7e9b6.png)
 
@@ -45,4 +45,4 @@ Thank you to all the people who already contributed to my project!
 
 [MIT](https://opensource.org/licenses/MIT)
 
-Copyright (c) 2022-present, Chocolate199
+Copyright (c) 2022-present, Chocolate1999
