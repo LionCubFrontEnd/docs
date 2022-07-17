@@ -71,7 +71,7 @@ const ContextSwitcher = ({ className }) => {
             aria-hidden="true"
             alt={context.name}
           />
-          <span className="lv0_link block truncate text-text">
+          <span className="lv0_link block truncate text-text text-base">
             {context.name}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
