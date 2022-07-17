@@ -39,7 +39,7 @@
 
 Thank you to all the people who already contributed to my project!
 
-<a href="https://github.com/LionCubFrontEnd/docs/graphs/contributors"><img src="./contributors.svg?width=890" /></a>
+<a href="https://github.com/LionCubFrontEnd/docs/graphs/contributors"><img src="https://github.com/LionCubFrontEnd/docs/blob/main/CONTRIBUTORS.svg" /></a>
 
 ## License
 
