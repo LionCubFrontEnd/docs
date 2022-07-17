@@ -1,6 +1,6 @@
 ## 项目介绍
 
-本项目基于 [Digital-Support-Notes](https://github.com/PatelN123/Digital-Support-Notes)修改，内容为前端相关， 如果对您有帮助，不妨给本项目来个 start ⭐️，感谢您的支持！
+本项目基于 [Digital-Support-Notes](https://github.com/PatelN123/Digital-Support-Notes) 修改，内容为前端相关， 如果对您有帮助，不妨给本项目来个 start ⭐️，感谢您的支持！
 
 
 ## 项目规范
