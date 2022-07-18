@@ -21,8 +21,9 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.6",
+    "@docusaurus/core": "^2.0.0-rc.1",
     "@docusaurus/preset-classic": "2.0.0-beta.6",
+    "@giscus/react": "^2.0.6",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
     "@mdx-js/react": "^1.6.21",

@@ -17,6 +17,7 @@ import clsx from 'clsx';
 import styles from './styles.module.css';
 import { ThemeClassNames, docVersionSearchTag } from '@docusaurus/theme-common';
 import Head from '@docusaurus/Head';
+import Giscus from '@giscus/react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 
 function DocPageContent({ currentDocRoute, versionMetadata, children }) {
@@ -105,6 +106,23 @@ function DocPageContent({ currentDocRoute, versionMetadata, children }) {
             )}
           >
             <MDXProvider components={MDXComponents}>{children}</MDXProvider>
+            <div className={styles.docsComments}>
+              <Giscus
+                id="comments"
+                repo="LionCubFrontEnd/docs"
+                repoId="R_kgDOHL7zqw"
+                category="General"
+                categoryId="DIC_kwDOHL7zq84CQRaM"
+                mapping="pathname"
+                term="学如逆水行舟，不进则退!"
+                reactionsEnabled="1"
+                emitMetadata="1"
+                inputPosition="top"
+                theme="light"
+                lang="zh-CN"
+                loading="lazy"
+              />
+            </div>
           </div>
         </main>
       </div>
