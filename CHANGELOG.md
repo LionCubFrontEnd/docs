@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/LionCubFrontEnd/docs/compare/v1.5.0...v1.6.0) (2022-07-18)
+
+
+### Features
+
+* 站点添加留言评论功能 ([#37](https://github.com/LionCubFrontEnd/docs/issues/37)) ([7eb16ad](https://github.com/LionCubFrontEnd/docs/commit/7eb16adb3e3215004165763fabaa98df4521e56a))
+
 # [1.5.0](https://github.com/LionCubFrontEnd/docs/compare/v1.4.0...v1.5.0) (2022-07-17)
 
 
