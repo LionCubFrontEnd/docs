@@ -25,6 +25,10 @@
 }
 
 @media (min-width: 997px) {
+  .docsComments {
+    max-width: 75%;
+  }
+
   .docMainContainer {
     flex-grow: 1;
     max-width: calc(100% - var(--doc-sidebar-width));
